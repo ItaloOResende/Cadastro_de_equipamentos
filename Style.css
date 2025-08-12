@@ -1,0 +1,206 @@
+/* Reset Básico e Estilo do Corpo */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #fff;
+    color: #333;
+    font-size: 14px;
+}
+
+.container {
+    width: 90%;
+    margin: 20px auto;
+}
+
+/* ESTILO PARA O TÍTULO PRINCIPAL ADICIONADO AQUI */
+.main-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.main-header h1 {
+    font-size: 2.5em; /* Tamanho da fonte do título */
+    color: #333;
+    margin: 0;
+}
+
+
+/* Painel de Controle Superior */
+.control-panel {
+    border: 1px solid #ccc;
+    background-color: #f7f7f7;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+input[type="text"], select {
+    padding: 8px;
+    border: 1px solid #999;
+}
+
+.button-section {
+    display: flex;
+}
+
+.btn {
+    padding: 9px 16px;
+    border: 1px solid #666;
+    background-color: #e0e0e0;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.btn:hover {
+    background-color: #d0d0d0;
+}
+
+.btn-primary {
+    background-color: #004a91;
+    color: white;
+    border-color: #003b74;
+}
+.btn-primary:hover {
+    background-color: #003b74;
+}
+
+/* Estilo da Tabela */
+main {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+thead {
+    background-color: #e0e0e0;
+    font-weight: bold;
+}
+
+/* Linhas Alternadas */
+tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f7f7f7;
+}
+
+/* Estilo do Link na primeira coluna */
+td a {
+    text-decoration: none;
+    color: #005a9c;
+    font-weight: bold;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+body { font-family: sans-serif; color: #333; }
+.container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+.main-header { text-align: center; margin-bottom: 2rem; }
+.filter-table td { padding: 8px; }
+.main-data-table { width: 100%; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.main-data-table th, .main-data-table td { border: 1px solid #ddd; padding: 12px; text-align: left; vertical-align: middle; }
+.main-data-table thead { background-color: #f2f2f2; }
+.main-data-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
+.main-data-table tbody tr:hover { background-color: #f1f1f1; }
+.btn, .btn-primary {
+    display: inline-block; padding: 8px 12px; border: 1px solid #ccc; background-color: #f7f7f7;
+    text-decoration: none; color: #333; border-radius: 4px; cursor: pointer; margin-right: 5px;
+}
+.btn-primary { background-color: #007bff; color: white; border-color: #007bff; }
+        
+.status-button {
+    width: 38px;  /* Largura fixa */
+    height: 38px; /* Altura fixa */
+    margin-right: 5px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #e9e9e9;
+    font-size: 1.2em; /* Ícone um pouco maior */
+    line-height: 1; /* Ajuda a centralizar o ícone */
+    transition: background-color 0.2s ease;
+}
+.status-button:hover { 
+    background-color: #dcdcdc;
+}
+/* Container para os campos do formulário */
+/* Container para os campos do formulário */
+.form-fields-grid {
+    display: grid;
+    /* Cria 4 colunas para telas grandes */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* Espaçamento vertical (entre as linhas) */
+    row-gap: 1.5rem; 
+    /* Espaçamento horizontal (entre as colunas) */
+    column-gap: 0.8rem; 
+    margin-bottom: 2rem;
+}
+
+/* Estilo para cada grupo de campo (label + input) */
+.field-group {
+    display: flex;
+    flex-direction: column; /* Organiza o label e o input em coluna */
+}
+
+.field-group label {
+    font-weight: bold;
+    margin-bottom: 0.5rem; /* Espaçamento entre o label e o input */
+}
+
+/* Campos que precisam ocupar a linha inteira */
+.full-width {
+    grid-column: 1 / -1; /* Ocupa da primeira à última coluna */
+}
+
+/* Estilo para os botões de ação */
+.form-actions {
+    margin-top: 2rem;
+    text-align: right;
+}
+/* Adiciona um estilo visual para campos desabilitados */
+input:disabled, textarea:disabled {
+    background-color: #f2f2f2;
+    cursor: not-allowed;
+}
+/* Ajuste para garantir que a grade se comporte como esperado */
+.form-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+.full-width {
+    grid-column: 1 / -1;
+}
+input:disabled, textarea:disabled { background-color: #f2f2f2; cursor: not-allowed; }
+.form-fields-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+.full-width { grid-column: 1 / -1; 
+}
+
+
+
