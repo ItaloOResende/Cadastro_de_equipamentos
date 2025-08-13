@@ -19,7 +19,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Sanitiza e obtém os dados do formulário
     $empresa = $conn->real_escape_string($_POST['filtro_empresa']); // AGORA CORRETO
+    if ($empresa === 'outro') {
+        $empresa = $_POST['empresa_outro_texto']; // Pega o valor do novo campo
+    }
     $tipo_equipamento = $conn->real_escape_string($_POST['tipo_equipamento']); // AGORA CORRETO
+    if ($tipo_equipamento === 'outros') {
+        $tipo_equipamento = $_POST['equipamento_outro_texto']; // Pega o valor do novo campo
+    }
     $nome_equipamento = $conn->real_escape_string($_POST['nome_equipamento']); // AGORA CORRETO
     $etiqueta_antiga = $conn->real_escape_string($_POST['etiqueta_antiga']);
     
