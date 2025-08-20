@@ -111,12 +111,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const cadastroButtons = document.querySelectorAll('.btn-primary[data-action="cadastro"]');
-    cadastroButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            window.location.href = 'cadastrar.html';
-        });
+const cadastroButtons = document.querySelectorAll('.btn-primary[data-action="cadastro"]');
+cadastroButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        window.location.href = 'cadastrar.html';
     });
+});
+
 
     // --- Lógica de preenchimento via URL (para edição de dados) ---
     const params = new URLSearchParams(window.location.search);
