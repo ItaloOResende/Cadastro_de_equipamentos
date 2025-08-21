@@ -201,6 +201,3 @@ input:disabled, textarea:disabled { background-color: #f2f2f2; cursor: not-allow
 .form-fields-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
 .full-width { grid-column: 1 / -1; 
 }
-
-
-
