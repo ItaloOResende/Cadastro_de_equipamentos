@@ -1,21 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Botões de verificar ---
-    const verifyButtons = document.querySelectorAll('.status-button[data-action="verify"]');
-    verifyButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            window.location.href = 'editar_dados.html';
-        });
-    });
-
-    // --- Botões de cadastro ---
-    const cadastroButtons = document.querySelectorAll('.btn-primary[data-action="cadastro"]');
-    cadastroButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            window.location.href = 'cadastrar.html';
-        });
-    });
-
-    // --- Seleção dos elementos ---
+    // --- Seleção dos elementos do DOM ---
     const nomeEquipamentoInput = document.getElementById('equipamento-nome');
     const radiosEmpresa = document.querySelectorAll('input[name="filtro_empresa"]');
     const radiosTipo = document.querySelectorAll('input[name="tipo_equipamento"]');
@@ -29,7 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputEmpresaOutro = document.getElementById('empresa-outro-texto');
     const inputEquipOutro = document.getElementById('equipamento-outro-texto');
 
-    // --- Funções ---
+    // --- Funções principais ---
+
+    // Função para atualizar o campo de Nome do Equipamento
     const updateEquipmentName = () => {
         const empresaSelecionada = document.querySelector('input[name="filtro_empresa"]:checked');
         const tipoSelecionado = document.querySelector('input[name="tipo_equipamento"]:checked');
@@ -44,6 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     sufixo = 'MON';
                 } else if (tipoSelecionado.value === 'notebook') {
                     sufixo = 'NOT';
+                } else if (tipoSelecionado.value === 'desktop') {
+                    sufixo = 'DESK';
                 }
             }
             nomeFinal = nomeBase + sufixo;
@@ -51,27 +39,24 @@ document.addEventListener('DOMContentLoaded', () => {
         nomeEquipamentoInput.value = nomeFinal;
     };
 
+    // Função para controlar a disponibilidade dos campos
     const updateFieldAvailability = () => {
         const tipoSelecionado = document.querySelector('input[name="tipo_equipamento"]:checked');
         if (!tipoSelecionado) return;
 
         const tipoValue = tipoSelecionado.value;
 
-        // CPU, RAM e Armazenamento apenas para Desktop ou Notebook
-        const isComputer = tipoValue === 'maquina' || tipoValue === 'notebook';
-        cpuInput.disabled = !isComputer;
-        ramInput.disabled = !isComputer;
-        armazenamentoInput.disabled = !isComputer;
+        const isComputer = tipoValue === 'monitor';
+        cpuInput.disabled = isComputer;
+        ramInput.disabled = isComputer;
+        armazenamentoInput.disabled = isComputer;
 
-        // Entradas de vídeo para Desktop, Notebook e Monitor
-        const hasVideoPorts = tipoValue === 'maquina' || tipoValue === 'notebook' || tipoValue === 'monitor';
-        videoInput.disabled = !hasVideoPorts;
+        const hasVideoPorts = tipoValue === 'desktop' || tipoValue === 'notebook' || tipoValue === 'monitor';
 
-        // Quantidade habilitada apenas para "Outros"
+
         const isOtherEquipment = tipoValue === 'outros';
         quantidadeInput.disabled = !isOtherEquipment;
 
-        // Limpeza ao desabilitar
         if (!isComputer) {
             cpuInput.value = '';
             ramInput.value = '';
@@ -85,19 +70,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Função para habilitar/desabilitar os campos de texto "Outro"
     const updateOutroFields = () => {
-        // Empresa
-        const isOutroEmpresa = document.getElementById('empresa-outro').checked;
+        // CORREÇÃO: Usando querySelector para encontrar o elemento checado
+        const empresaSelecionada = document.querySelector('input[name="filtro_empresa"]:checked');
+        const tipoSelecionado = document.querySelector('input[name="tipo_equipamento"]:checked');
+        
+        // Campo "Outro" da Empresa
+        const isOutroEmpresa = empresaSelecionada && empresaSelecionada.value === 'outro';
         inputEmpresaOutro.disabled = !isOutroEmpresa;
         if (!isOutroEmpresa) inputEmpresaOutro.value = '';
-
-        // Tipo de equipamento
-        const isOutroEquip = document.getElementById('tipo-outros').checked;
+        
+        // Campo "Outro" do Equipamento
+        const isOutroEquip = tipoSelecionado && tipoSelecionado.value === 'outros';
         inputEquipOutro.disabled = !isOutroEquip;
         if (!isOutroEquip) inputEquipOutro.value = '';
     };
 
-    // --- Eventos ---
+    // --- Definição dos ouvintes de eventos ---
     radiosEmpresa.forEach(radio => {
         radio.addEventListener('change', () => {
             updateEquipmentName();
@@ -113,23 +103,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Inicialização ---
-    updateEquipmentName();
-    updateFieldAvailability();
-    updateOutroFields();
+    // --- Funcionalidades de Redirecionamento ---
+    const verifyButtons = document.querySelectorAll('.status-button[data-action="verify"]');
+    verifyButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            window.location.href = 'editar_dados.html';
+        });
+    });
+
+const cadastroButtons = document.querySelectorAll('.btn-primary[data-action="cadastro"]');
+cadastroButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        window.location.href = 'cadastrar.html';
+    });
 });
 
-// --- Preenchimento via URL ---
-document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
 
+    // --- Lógica de preenchimento via URL (para edição de dados) ---
+    const params = new URLSearchParams(window.location.search);
     const equipamento = params.get('equipamento');
     const antigo = params.get('antigo');
 
     if (equipamento) {
-        document.getElementById('equipamento-nome').value = equipamento;
+        nomeEquipamentoInput.value = equipamento;
     }
     if (antigo) {
         document.getElementById('etiqueta-antiga').value = antigo;
     }
+
+    // --- Chamadas de inicialização ---
+    updateEquipmentName();
+    updateFieldAvailability();
+    updateOutroFields();
 });
