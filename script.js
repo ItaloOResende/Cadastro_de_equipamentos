@@ -46,13 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const tipoValue = tipoSelecionado.value;
 
-        const isComputer = tipoValue === 'maquina' || tipoValue === 'notebook';
-        cpuInput.disabled = !isComputer;
-        ramInput.disabled = !isComputer;
-        armazenamentoInput.disabled = !isComputer;
+        const isComputer = tipoValue === 'monitor';
+        cpuInput.disabled = isComputer;
+        ramInput.disabled = isComputer;
+        armazenamentoInput.disabled = isComputer;
 
         const hasVideoPorts = tipoValue === 'desktop' || tipoValue === 'notebook' || tipoValue === 'monitor';
-        videoInput.disabled = !hasVideoPorts;
+
 
         const isOtherEquipment = tipoValue === 'outros';
         quantidadeInput.disabled = !isOtherEquipment;
