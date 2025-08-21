@@ -73,39 +73,8 @@
                 </thead>
                 <tbody>
                     <?php
-                    // Conexão com banco
-                    $conn = new mysqli("localhost", "root", "", "gvu");
-
-                    if ($conn->connect_error) {
-                        echo "<tr><td colspan='6'>Erro de conexão: " . $conn->connect_error . "</td></tr>";
-                    } else {
-                        // Busca dados
-                        $sql = "SELECT nome_equipamento, etiqueta_antiga, situacao FROM equipamentos";
-                        $result = $conn->query($sql);
-
-                        if ($result->num_rows > 0) {
-                            while($row = $result->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<td>" . htmlspecialchars($row["nome_equipamento"]) . "</td>";
-                                echo "<td>" . htmlspecialchars($row["etiqueta_antiga"]) . "</td>";
-                                echo "<td>-</td>"; // Usuário (fixo)
-                                echo "<td>-</td>"; // Setor (fixo)
-                                echo "<td>" . htmlspecialchars($row["situacao"]) . "</td>";
-                                echo "<td>
-                                    <button class='status-button' data-action='verify' title='Verificar informações'>🔍</button>
-                                    <button class='status-button' data-action='Estoque' title='Mover para Estoque'>📦</button>
-                                    <button class='status-button' data-action='Empréstimo' title='Mover para Empréstimo'>🤝</button>
-                                    <button class='status-button' data-action='Lixo Eletrônico' title='Mover para Lixo Eletrônico'>🗑️</button>
-                                    <button class='status-button' data-action='Descarte' title='Mover para Descarte'>🔥</button>
-                                </td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='6'>Nenhum equipamento encontrado.</td></tr>";
-                        }
-                    }
-
-                    $conn->close();
+                        // Inclui o arquivo que contém a lógica de listagem de equipamentos
+                        include 'listar_equipamentos.php';
                     ?>
                 </tbody>
             </table>
