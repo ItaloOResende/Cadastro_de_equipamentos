@@ -1,0 +1,43 @@
+//Para o banco de dados funcionar, siga o passo a passo:
+Instale e abra o XAMP no computador
+Ligue o Apache e o MySQL
+
+//Para entrar no banco de dados:
+Clique em Shell
+Digite: mysql -u root -p
+Aperte: ENTER
+
+//Visualizar Databases criadas:
+show databases;
+
+//Criar Database GVU:
+CREATE DATABASE IF NOT EXISTS GVU CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+//Entrar na Database:
+use gvu
+
+
+//Para criar a tabela de equipamentos:
+    CREATE TABLE IF NOT EXISTS equipamentos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    empresa VARCHAR(50) NOT NULL,
+    tipo_equipamento VARCHAR(50) NOT NULL,
+    nome_equipamento VARCHAR(255) NOT NULL,
+    etiqueta_antiga VARCHAR(100),
+    quantidade INT DEFAULT 1,
+    marca_modelo VARCHAR(255),
+    cpu VARCHAR(100),
+    ram VARCHAR(100),
+    armazenamento VARCHAR(100),
+    entradas_video VARCHAR(255),
+    observacao TEXT,
+    data_entrada DATE NOT NULL,
+    data_saida DATE,
+    situacao VARCHAR(50) DEFAULT 'Em estoque'
+);
+
+//Para visualizar a tabela de equipamentos:
+show tables;
+select * from equipamentos;
+
+
