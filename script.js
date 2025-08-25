@@ -30,8 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     sufixo = 'MON';
                 } else if (tipoSelecionado.value === 'notebook') {
                     sufixo = 'NOT';
-                }
             }
+        }
             nomeFinal = nomeBase + sufixo;
         }
         nomeEquipamentoInput.value = nomeFinal;
@@ -133,4 +133,63 @@ cadastroButtons.forEach(button => {
     updateEquipmentName();
     updateFieldAvailability();
     updateOutroFields();
+});
+
+//Parte do código para os botões de situação
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Adiciona um ouvinte de eventos na tabela para gerenciar os cliques nos botões de status
+    const tableBody = document.querySelector('.main-data-table tbody');
+    if (tableBody) {
+        tableBody.addEventListener('click', (event) => {
+            const button = event.target.closest('.status-button[data-action]');
+            
+            if (button) {
+                const action = button.dataset.action;
+                const equipmentId = button.dataset.id;
+                
+                if (action === 'verify') {
+                    // Lógica para o botão de 'Verificar' (redireciona para edição)
+                    const row = button.closest('tr');
+                    const equipamento = row.querySelector('td:nth-child(1)').textContent;
+                    const antigo = row.querySelector('td:nth-child(2)').textContent;
+                    window.location.href = `editar_dados.html?equipamento=${encodeURIComponent(equipamento)}&antigo=${encodeURIComponent(antigo)}`;
+                } else {
+                    // Lógica para atualização do status
+                    if (confirm(`Tem certeza de que deseja alterar a situação para "${action}"?`)) {
+                        // Envia uma requisição POST para o servidor
+                        fetch('index.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `id=${equipmentId}&situacao=${action}`
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Situação atualizada com sucesso!');
+                                window.location.reload(); // Recarrega a página para mostrar a mudança
+                            } else {
+                                alert('Erro ao atualizar a situação: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro:', error);
+                            alert('Ocorreu um erro na requisição.');
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    // Funcionalidades de Redirecionamento para o botão de cadastro
+    const cadastroButton = document.querySelector('.btn-primary[data-action="cadastro"]');
+    if (cadastroButton) {
+        cadastroButton.addEventListener('click', () => {
+            window.location.href = 'cadastrar.html';
+        });
+    }
+
 });
