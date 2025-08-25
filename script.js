@@ -30,8 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     sufixo = 'MON';
                 } else if (tipoSelecionado.value === 'notebook') {
                     sufixo = 'NOT';
-                } else if (tipoSelecionado.value === 'desktop') {
-                    sufixo = 'DESK';
                 }
             }
             nomeFinal = nomeBase + sufixo;
