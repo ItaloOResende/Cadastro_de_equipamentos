@@ -8,24 +8,49 @@ $dbname = "gvu";
 // Cria a conexão com o banco de dados
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Verifica a conexão
+// Verifica a conexão e encerra o script se houver erro
 if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
 
-// Inicializa variáveis para o formulário e a consulta
-// Usa o operador de coalescência nula (??) para definir valores padrão
+// Lógica para processar a atualização do status (requisição POST)
+// Esta parte do código é executada quando um dos botões de status é clicado
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['id'] ?? null;
+    $situacao = $_POST['situacao'] ?? null;
+
+    if ($id !== null && $situacao !== null) {
+        // Prepara e executa a consulta para atualizar a situação no banco de dados
+        $sql_update = "UPDATE equipamentos SET situacao = ? WHERE id = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        if ($stmt_update) {
+            $stmt_update->bind_param("si", $situacao, $id);
+            $stmt_update->execute();
+            $stmt_update->close();
+            // Retorna uma resposta JSON de sucesso para o JavaScript
+            echo json_encode(['success' => true]);
+            exit; // Interrompe o script para não carregar o resto da página HTML
+        }
+    }
+    // Retorna uma resposta de erro para o JavaScript
+    echo json_encode(['success' => false, 'message' => 'Parâmetros inválidos']);
+    exit;
+}
+
+// Lógica para carregar a página (requisição GET)
+// Esta parte do código é executada quando a página é acessada pela primeira vez ou via pesquisa
 $search_query = $_GET['search-input'] ?? '';
 $filtro_empresa = $_GET['filtro_empresa'] ?? 'ambos';
 $filtro_tipo = $_GET['filtro_tipo'] ?? 'todos';
 $filtro_status = $_GET['filtro_status'] ?? 'todas';
 
-// Define a consulta SQL base para buscar todos os equipamentos
-$sql = "SELECT * FROM equipamentos WHERE 1=1";
+// Define a consulta SQL base para buscar os equipamentos
+// Corrigido: a consulta agora seleciona apenas as colunas que existem na sua tabela
+$sql = "SELECT id, nome_equipamento, etiqueta_antiga, quantidade, situacao FROM equipamentos WHERE 1=1";
 $params = [];
 $types = "";
 
-// Lógica para aplicar os filtros e construir a consulta
+// Lógica para aplicar os filtros da pesquisa
 if ($filtro_empresa !== 'ambos') {
     $sql .= " AND empresa = ?";
     $params[] = $filtro_empresa;
@@ -102,10 +127,10 @@ $result = $stmt->get_result();
                     <tr>
                         <td class="label-cell"><label><b>Situação:</b></label></td>
                         <td><div class="radio-item"><input type="radio" id="filtro-todas" name="filtro_status" value="todas" <?php echo ($filtro_status == 'todas') ? 'checked' : ''; ?>><label for="filtro-todas">Todas</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="filtro-estoque" name="filtro_status" value="estoque" <?php echo ($filtro_status == 'estoque') ? 'checked' : ''; ?>><label for="filtro-estoque">Estoque</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="filtro-emprestimo" name="filtro_status" value="emprestimo" <?php echo ($filtro_status == 'emprestimo') ? 'checked' : ''; ?>><label for="filtro-emprestimo">Empréstimo</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="filtro-lixo" name="filtro_status" value="lixo" <?php echo ($filtro_status == 'lixo') ? 'checked' : ''; ?>><label for="filtro-lixo">Lixo eletrônico</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="filtro-descartar" name="filtro_status" value="descartar" <?php echo ($filtro_status == 'descartar') ? 'checked' : ''; ?>><label for="filtro-descartar">Descarte</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="filtro-estoque" name="filtro_status" value="Estoque" <?php echo ($filtro_status == 'Estoque') ? 'checked' : ''; ?>><label for="filtro-estoque">Estoque</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="filtro-emprestimo" name="filtro_status" value="Empréstimo" <?php echo ($filtro_status == 'Empréstimo') ? 'checked' : ''; ?>><label for="filtro-emprestimo">Empréstimo</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="filtro-lixo" name="filtro_status" value="Lixo Eletrônico" <?php echo ($filtro_status == 'Lixo Eletrônico') ? 'checked' : ''; ?>><label for="filtro-lixo">Lixo eletrônico</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="filtro-descartar" name="filtro_status" value="Descarte" <?php echo ($filtro_status == 'Descarte') ? 'checked' : ''; ?>><label for="filtro-descartar">Descarte</label></div></td>
                         <td class="empty-cell"></td>
                     </tr>
                     <tr>
@@ -113,9 +138,7 @@ $result = $stmt->get_result();
                         <td colspan="5">
                             <div class="actions-cell">
                                 <input type="text" id="search-input" name="search-input" placeholder="Pesquisar..." value="<?php echo htmlspecialchars($search_query); ?>">
-                                <!-- Botão de Pesquisar: type="submit" para enviar o formulário -->
                                 <button class="btn" type="submit">Pesquisar</button>
-                                <!-- Botão de Cadastrar: type="button" para evitar o envio do formulário, e onclick para redirecionar -->
                                 <button class="btn btn-primary" type="button" onclick="window.location.href='cadastrar.html'">Cadastrar Equipamento</button>
                             </div>
                         </td>
@@ -123,15 +146,14 @@ $result = $stmt->get_result();
                 </table>
             </div>
         </form>
-        
+
         <main>
             <table class="main-data-table">
                 <thead>
                     <tr>
                         <th>Equipamento</th>
                         <th>Antigo</th>
-                        <th>Usuário</th>
-                        <th>Setor</th>
+                        <th>Quantidade</th>
                         <th>Situação</th>
                         <th>Ações</th>
                     </tr>
@@ -144,20 +166,29 @@ $result = $stmt->get_result();
                             echo "<tr>";
                             echo "<td>" . htmlspecialchars($row["nome_equipamento"]) . "</td>";
                             echo "<td>" . htmlspecialchars($row["etiqueta_antiga"]) . "</td>";
-                            echo "<td>" . htmlspecialchars($row["usuario"] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($row["setor"] ?? '-') . "</td>";
+                            echo "<td>" . htmlspecialchars($row["quantidade"] ?? '-') . "</td>";
                             echo "<td>" . htmlspecialchars($row["situacao"]) . "</td>";
+<<<<<<< HEAD
+echo "<td>
+    <button class='status-button' data-action='verify' data-id='" . htmlspecialchars($row['id']) . "' title='Verificar informações'>🔍</button>
+    <button class='status-button' data-action='Estoque' data-id='" . htmlspecialchars($row['id']) . "' title='Mover para Estoque'>📦</button>
+    <button class='status-button' data-action='Empréstimo' data-id='" . htmlspecialchars($row['id']) . "' title='Mover para Empréstimo'>🤝</button>
+    <button class='status-button' data-action='Lixo Eletrônico' data-id='" . htmlspecialchars($row['id']) . "' title='Mover para Lixo Eletrônico'>🗑️</button>
+    <button class='status-button' data-action='Descarte' data-id='" . htmlspecialchars($row['id']) . "' title='Mover para Descarte'>🔥</button>
+</td>";
+=======
                             echo "<td>
                                 <button class='status-button' data-action='verify' title='Verificar informações'>🔍</button>
-                                <button class='status-button' data-action='Estoque' title='Mover para Estoque'>📦</button>
-                                <button class='status-button' data-action='Empréstimo' title='Mover para Empréstimo'>🤝</button>
-                                <button class='status-button' data-action='Lixo Eletrônico' title='Mover para Lixo Eletrônico'>🗑️</button>
-                                <button class='status-button' data-action='Descarte' title='Mover para Descarte'>🔥</button>
+                                <button class='status-button' data-action='Estoque' data-id='{$row['id']}' title='Mover para Estoque'>📦</button>
+                                <button class='status-button' data-action='Empréstimo' data-id='{$row['id']}' title='Mover para Empréstimo'>🤝</button>
+                                <button class='status-button' data-action='Lixo Eletrônico' data-id='{$row['id']}' title='Mover para Lixo Eletrônico'>🗑️</button>
+                                <button class='status-button' data-action='Descarte' data-id='{$row['id']}' title='Mover para Descarte'>🔥</button>
                             </td>";
+>>>>>>> 7d430a2bdc09651c06807b1a538567168408e9ca
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='6'>Nenhum equipamento encontrado.</td></tr>";
+                        echo "<tr><td colspan='5'>Nenhum equipamento encontrado.</td></tr>"; // Corrigido para 5 colunas
                     }
                     $stmt->close();
                     $conn->close();
