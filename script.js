@@ -78,36 +78,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 nomeEquipamentoInput.value = nomeFinal;
             }
         };
-
+        
         const updateFieldAvailability = () => {
-            const tipoSelecionado = document.querySelector('input[name="filtro_tipo"]:checked');
-            if (!tipoSelecionado) return;
-            const tipoValue = tipoSelecionado.value;
-            const isMonitor = tipoValue === 'monitor';
-            const isComputer = tipoValue === 'desktop' || tipoValue === 'notebook';
+    const tipoSelecionado = document.querySelector('input[name="filtro_tipo"]:checked');
+    if (!tipoSelecionado) return;
+    const tipoValue = tipoSelecionado.value;
 
-            if (cpuInput) cpuInput.disabled = isMonitor || !isComputer;
-            if (ramInput) ramInput.disabled = isMonitor || !isComputer;
-            if (armazenamentoInput) armazenamentoInput.disabled = isMonitor || !isComputer;
+    // Apenas o monitor desabilita esses campos.
+    const isMonitor = tipoValue === 'monitor';
+    if (cpuInput) cpuInput.disabled = isMonitor;
+    if (ramInput) ramInput.disabled = isMonitor;
+    if (armazenamentoInput) armazenamentoInput.disabled = isMonitor;
 
-            const hasVideoPorts = tipoValue === 'desktop' || tipoValue === 'notebook' || tipoValue === 'monitor';
-            if (videoInput) videoInput.disabled = !hasVideoPorts;
+    const isOtherEquipment = tipoValue === 'outro';
+    if (quantidadeInput) quantidadeInput.disabled = !isOtherEquipment;
 
-            const isOtherEquipment = tipoValue === 'outro';
-            if (quantidadeInput) quantidadeInput.disabled = !isOtherEquipment;
-
-            if (!isComputer) {
-                if (cpuInput) cpuInput.value = '';
-                if (ramInput) ramInput.value = '';
-                if (armazenamentoInput) armazenamentoInput.value = '';
-            }
-            if (!hasVideoPorts) {
-                if (videoInput) videoInput.value = '';
-            }
-            if (!isOtherEquipment) {
-                if (quantidadeInput) quantidadeInput.value = '1';
-            }
-        };
+    // Lógica para limpar os campos quando desabilitados.
+    if (isMonitor) {
+        if (cpuInput) cpuInput.value = '';
+        if (ramInput) ramInput.value = '';
+        if (armazenamentoInput) armazenamentoInput.value = '';
+    }
+    
+    if (!hasVideoPorts) {
+        if (videoInput) videoInput.value = '';
+    }
+    if (!isOtherEquipment) {
+        if (quantidadeInput) quantidadeInput.value = '1';
+    }
+};
 
         const updateOutroFields = () => {
             const empresaSelecionada = document.querySelector('input[name="filtro_empresa"]:checked');
@@ -166,5 +165,21 @@ document.addEventListener('DOMContentLoaded', () => {
         cadastroButton.addEventListener('click', () => {
             window.location.href = 'cadastrar.html';
         });
+    }
+});
+document.addEventListener('DOMContentLoaded', () => {
+    // ... seu código JS existente ...
+
+    // --- Lógica para preencher a data de entrada com a data atual ---
+    const dataEntradaInput = document.getElementById('entrada');
+    if (dataEntradaInput) {
+        const today = new Date();
+        const year = today.getFullYear();
+        // O mês em JavaScript é de 0 a 11, por isso somamos 1
+        const month = String(today.getMonth() + 1).padStart(2, '0'); 
+        const day = String(today.getDate()).padStart(2, '0');
+        
+        // Define o valor no formato YYYY-MM-DD, que é o esperado pelo input type="date"
+        dataEntradaInput.value = `${year}-${month}-${day}`;
     }
 });
