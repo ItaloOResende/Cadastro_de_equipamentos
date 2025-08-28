@@ -90,10 +90,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Erro ao salvar o equipamento: " . $conn->error;
     }
 }
+}
 
 // Fecha a conexão com o banco de dados
 $conn->close();
 
 ?>
-
-
