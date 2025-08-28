@@ -104,12 +104,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Funcionalidades de Redirecionamento ---
-    const verifyButtons = document.querySelectorAll('.status-button[data-action="verify"]');
-    verifyButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            window.location.href = 'editar_dados.html';
-        });
+const verifyButtons = document.querySelectorAll('.status-button[data-action="verify"]');
+verifyButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Pega o ID do botão clicado
+        const id = button.getAttribute('data-id');
+        // Redireciona para a página de edição, passando o ID na URL
+        window.location.href = `editar.php?id=${id}`;
     });
+});
 
 const cadastroButtons = document.querySelectorAll('.btn-primary[data-action="cadastro"]');
 cadastroButtons.forEach(button => {
