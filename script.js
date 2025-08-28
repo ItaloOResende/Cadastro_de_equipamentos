@@ -65,16 +65,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 let nomeBase = empresaSelecionada.value.toUpperCase();
                 let sufixo = '';
     
-                if (tipoSelecionado && tipoSelecionado.value !== 'outros') {
+                if (tipoSelecionado && tipoSelecionado.value !== 'outro') {
                     if (tipoSelecionado.value === 'monitor') {
                         sufixo = 'MON';
                     } else if (tipoSelecionado.value === 'notebook') {
                         sufixo = 'NOT';
-                    } else if (tipoSelecionado.value === 'desktop') {
-                        sufixo = 'DESK';
                     }
                 }
-                nomeFinal = nomeBase + (sufixo ? `-${sufixo}` : '');
+                nomeFinal = nomeBase + (sufixo ? `${sufixo}` : '');
             }
             if (nomeEquipamentoInput) {
                 nomeEquipamentoInput.value = nomeFinal;
@@ -95,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const hasVideoPorts = tipoValue === 'desktop' || tipoValue === 'notebook' || tipoValue === 'monitor';
             if (videoInput) videoInput.disabled = !hasVideoPorts;
 
-            const isOtherEquipment = tipoValue === 'outros';
+            const isOtherEquipment = tipoValue === 'outro';
             if (quantidadeInput) quantidadeInput.disabled = !isOtherEquipment;
 
             if (!isComputer) {
@@ -114,12 +112,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const updateOutroFields = () => {
             const empresaSelecionada = document.querySelector('input[name="filtro_empresa"]:checked');
             const tipoSelecionado = document.querySelector('input[name="filtro_tipo"]:checked');
+
             const isOutroEmpresa = empresaSelecionada && empresaSelecionada.value === 'outro';
             if (inputEmpresaOutro) {
                 inputEmpresaOutro.disabled = !isOutroEmpresa;
                 if (!isOutroEmpresa) inputEmpresaOutro.value = '';
             }
-            const isOutroEquip = tipoSelecionado && tipoSelecionado.value === 'outros';
+
+            // CORREÇÃO: Usando 'outro' conforme o HTML do cadastrar.html
+            const isOutroEquip = tipoSelecionado && tipoSelecionado.value === 'outro';
             if (inputEquipOutro) {
                 inputEquipOutro.disabled = !isOutroEquip;
                 if (!isOutroEquip) inputEquipOutro.value = '';
@@ -166,5 +167,4 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'cadastrar.html';
         });
     }
-
 });
