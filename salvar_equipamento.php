@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $empresa = $_POST['empresa_outro_texto']; // Pega o valor do novo campo
     }
     $tipo_equipamento = $conn->real_escape_string($_POST['tipo_equipamento']); // AGORA CORRETO
-    if ($tipo_equipamento === 'outros') {
+    if ($tipo_equipamento === 'outro') {
         $tipo_equipamento = $_POST['equipamento_outro_texto']; // Pega o valor do novo campo
     }
     $nome_equipamento = $conn->real_escape_string($_POST['nome_equipamento']); // AGORA CORRETO
