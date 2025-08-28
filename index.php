@@ -39,7 +39,7 @@ $filtro_empresa = $_GET['filtro_empresa'] ?? 'ambos';
 $filtro_tipo = $_GET['filtro_tipo'] ?? 'todos';
 $filtro_status = $_GET['filtro_status'] ?? 'todas';
 
-// CORRIGIDO: A consulta agora seleciona apenas as colunas que existem na sua tabela
+// Define a consulta SQL base para buscar os equipamentos
 $sql = "SELECT id, nome_equipamento, etiqueta_antiga, quantidade, situacao FROM equipamentos WHERE 1=1";
 $params = [];
 $types = "";
@@ -144,8 +144,6 @@ $result = $stmt->get_result();
                     <tr>
                         <th>Equipamento</th>
                         <th>Antigo</th>
-                        <th>Usuário</th>
-                        <th>Setor</th>
                         <th>Situação</th>
                         <th>Ações</th>
                     </tr>
@@ -158,7 +156,7 @@ $result = $stmt->get_result();
                             <tr>
                                 <td><?php echo htmlspecialchars($row["nome_equipamento"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["etiqueta_antiga"]); ?></td>
-                                <td>-</td> <td>-</td> <td><?php echo htmlspecialchars($row["situacao"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["situacao"]); ?></td>
                                 <td>
                                     <button class='status-button' data-action='verify' data-id='<?php echo htmlspecialchars($row['id']); ?>' title='Verificar informações'>🔍</button>
                                     <button class='status-button' data-action='Estoque' data-id='<?php echo htmlspecialchars($row['id']); ?>' title='Mover para Estoque'>📦</button>
@@ -170,7 +168,7 @@ $result = $stmt->get_result();
                             <?php
                         }
                     } else {
-                        echo "<tr><td colspan='6'>Nenhum equipamento encontrado.</td></tr>";
+                        echo "<tr><td colspan='4'>Nenhum equipamento encontrado.</td></tr>";
                     }
                     ?>
                 </tbody>
