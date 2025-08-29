@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formEquipamento) {
         const nomeEquipamentoInput = document.getElementById('equipamento-nome');
         const radiosEmpresa = document.querySelectorAll('input[name="filtro_empresa"]');
-        const radiosTipo = document.querySelectorAll('input[name="filtro_tipo"]');
+        const radiosTipo = document.querySelectorAll('input[name="tipo_equipamento"]');
     
         const cpuInput = document.getElementById('cpu');
         const ramInput = document.getElementById('ram');
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         const updateEquipmentName = () => {
             const empresaSelecionada = document.querySelector('input[name="filtro_empresa"]:checked');
-            const tipoSelecionado = document.querySelector('input[name="filtro_tipo"]:checked');
+            const tipoSelecionado = document.querySelector('input[name="tipo_equipamento"]:checked');
             let nomeFinal = '';
     
             if (empresaSelecionada && empresaSelecionada.value !== 'outro') {
@@ -80,37 +80,33 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         const updateFieldAvailability = () => {
-    const tipoSelecionado = document.querySelector('input[name="filtro_tipo"]:checked');
-    if (!tipoSelecionado) return;
-    const tipoValue = tipoSelecionado.value;
+            const tipoSelecionado = document.querySelector('input[name="tipo_equipamento"]:checked');
+            if (!tipoSelecionado) return;
+            const tipoValue = tipoSelecionado.value;
 
-    // Apenas o monitor desabilita esses campos.
-    const isMonitor = tipoValue === 'monitor';
-    if (cpuInput) cpuInput.disabled = isMonitor;
-    if (ramInput) ramInput.disabled = isMonitor;
-    if (armazenamentoInput) armazenamentoInput.disabled = isMonitor;
+            // Apenas o monitor desabilita esses campos.
+            const isMonitor = tipoValue === 'monitor';
+            if (cpuInput) cpuInput.disabled = isMonitor;
+            if (ramInput) ramInput.disabled = isMonitor;
+            if (armazenamentoInput) armazenamentoInput.disabled = isMonitor;
 
-    const isOtherEquipment = tipoValue === 'outro';
-    if (quantidadeInput) quantidadeInput.disabled = !isOtherEquipment;
+            const isOtherEquipment = tipoValue === 'outro';
+            if (quantidadeInput) quantidadeInput.disabled = !isOtherEquipment;
 
-    // Lógica para limpar os campos quando desabilitados.
-    if (isMonitor) {
-        if (cpuInput) cpuInput.value = '';
-        if (ramInput) ramInput.value = '';
-        if (armazenamentoInput) armazenamentoInput.value = '';
-    }
-    
-    if (!hasVideoPorts) {
-        if (videoInput) videoInput.value = '';
-    }
-    if (!isOtherEquipment) {
-        if (quantidadeInput) quantidadeInput.value = '1';
-    }
-};
+            // Lógica para limpar os campos quando desabilitados.
+            if (isMonitor) {
+                if (cpuInput) cpuInput.value = '';
+                if (ramInput) ramInput.value = '';
+                if (armazenamentoInput) armazenamentoInput.value = '';
+            }
+            if (!isOtherEquipment) {
+                if (quantidadeInput) quantidadeInput.value = '1';
+            }
+        };
 
         const updateOutroFields = () => {
             const empresaSelecionada = document.querySelector('input[name="filtro_empresa"]:checked');
-            const tipoSelecionado = document.querySelector('input[name="filtro_tipo"]:checked');
+            const tipoSelecionado = document.querySelector('input[name="tipo_equipamento"]:checked');
 
             const isOutroEmpresa = empresaSelecionada && empresaSelecionada.value === 'outro';
             if (inputEmpresaOutro) {
@@ -118,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!isOutroEmpresa) inputEmpresaOutro.value = '';
             }
 
-            // CORREÇÃO: Usando 'outro' conforme o HTML do cadastrar.html
             const isOutroEquip = tipoSelecionado && tipoSelecionado.value === 'outro';
             if (inputEquipOutro) {
                 inputEquipOutro.disabled = !isOutroEquip;
@@ -153,6 +148,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (etiquetaAntigaInput) etiquetaAntigaInput.value = antigo;
         }
 
+        // Lógica para preencher a data de entrada com a data atual
+        const dataEntradaInput = document.getElementById('entrada');
+        if (dataEntradaInput) {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            dataEntradaInput.value = `${year}-${month}-${day}`;
+        }
+
         // Chamadas de inicialização
         updateEquipmentName();
         updateFieldAvailability();
@@ -165,21 +170,5 @@ document.addEventListener('DOMContentLoaded', () => {
         cadastroButton.addEventListener('click', () => {
             window.location.href = 'cadastrar.html';
         });
-    }
-});
-document.addEventListener('DOMContentLoaded', () => {
-    // ... seu código JS existente ...
-
-    // --- Lógica para preencher a data de entrada com a data atual ---
-    const dataEntradaInput = document.getElementById('entrada');
-    if (dataEntradaInput) {
-        const today = new Date();
-        const year = today.getFullYear();
-        // O mês em JavaScript é de 0 a 11, por isso somamos 1
-        const month = String(today.getMonth() + 1).padStart(2, '0'); 
-        const day = String(today.getDate()).padStart(2, '0');
-        
-        // Define o valor no formato YYYY-MM-DD, que é o esperado pelo input type="date"
-        dataEntradaInput.value = `${year}-${month}-${day}`;
     }
 });
