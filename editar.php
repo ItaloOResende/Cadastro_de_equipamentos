@@ -15,13 +15,10 @@ if ($conn->connect_error) {
 
 // -------------------------------------------------------------------
 // Lógica para processar o formulário quando o botão "Salvar" for clicado
-// ESTE BLOCO SÓ É EXECUTADO SE A REQUISIÇÃO FOR VIA POST
 // -------------------------------------------------------------------
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // 1. Pega o ID do campo oculto do formulário
     $equipamento_id = $_POST['id'];
 
-    // 2. Sanitiza e obtém os dados dos outros campos
     $empresa = $_POST['filtro_empresa'] ?? null;
     $tipo_equipamento = $_POST['filtro_tipo'] ?? null;
     $nome_equipamento = $_POST['equipamento_nome'] ?? null;
@@ -32,17 +29,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ram = $_POST['ram'] ?? null;
     $armazenamento = $_POST['armazenamento'] ?? null;
     $entradas_video = $_POST['entradas_video'] ?? null;
-    $entrada = $_POST['data_entrada'] ?? null;
+    $data_entrada = $_POST['data_entrada'] ?? null;
     $observacao = $_POST['observacao'] ?? null;
     
-    // 3. Prepara a consulta SQL de UPDATE
     $sql = "UPDATE equipamentos SET
         empresa = ?, tipo_equipamento = ?, nome_equipamento = ?, etiqueta_antiga = ?,
         quantidade = ?, marca_modelo = ?, cpu = ?, ram = ?, armazenamento = ?,
         entradas_video = ?, data_entrada = ?, observacao = ?
         WHERE id = ?";
 
-    // 4. Prepara e executa o statement
     $stmt = $conn->prepare($sql);
     if ($stmt === false) {
         die("Erro na preparação da consulta: " . $conn->error);
@@ -50,12 +45,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $stmt->bind_param("ssssisssssssi",
         $empresa, $tipo_equipamento, $nome_equipamento, $etiqueta_antiga, $quantidade,
-        $marca_modelo, $cpu, $ram, $armazenamento, $entradas_video, $entrada,
+        $marca_modelo, $cpu, $ram, $armazenamento, $entradas_video, $data_entrada,
         $observacao, $equipamento_id
     );
 
     if ($stmt->execute()) {
-        // Redireciona para a página inicial após o sucesso
         header("Location: index.php");
         exit();
     } else {
@@ -65,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 } else {
     // -------------------------------------------------------------------
-    // Lógica para exibir o formulário (quando a página é acessada via GET)
+    // Lógica para exibir o formulário (requisição GET)
     // -------------------------------------------------------------------
     if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $equipamento_id = $_GET['id'];
@@ -159,8 +153,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" id="entradas-video" name="entradas_video" value="<?php echo htmlspecialchars($equipamento['entradas_video']); ?>" placeholder="Ex: HDMI, VGA, DisplayPort...">
                 </div>
                 <div class="field-group">
-                    <label for="entrada">Data de Entrada:</label>
-                    <input type="date" id="entrada" name="data_entrada" value="<?php echo htmlspecialchars($equipamento['data_entrada']); ?>">
+                    <label for="data_entrada">Data de Entrega:</label>
+                    <input type="date" id="data_entrada" name="data_entrada" value="<?php echo htmlspecialchars($equipamento['data_entrada']); ?>">
                 </div>
                 <div class="field-group full-width">
                     <label for="observacao">Observação:</label>
