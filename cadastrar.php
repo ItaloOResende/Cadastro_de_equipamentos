@@ -1,0 +1,143 @@
+<?php
+session_start();
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Equipamentos - GVU</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header class="main-header">
+            <h1><a href="index.php" class="header-link">Grupo Vitória da União (GVU)</a></h1>
+            <h1>Cadastrar Novo Equipamento</h1>
+        </header>
+        
+        <!-- O pop-up HTML que será exibido pelo JavaScript -->
+        <div id="status-message" class="popup-success" style="display: none;">
+            <!-- O conteúdo da mensagem será inserido aqui pelo JavaScript -->
+        </div>
+
+        <form class="cadastro-form" action="salvar_equipamento.php" method="POST">
+        <div class="control-panel">
+            <table class="filter-table">
+                <tr>
+                    <td class="label-cell"><label><b>Empresa:</b></label></td>
+                    <td><div class="radio-item"><input type="radio" id="empresa-gvu" name="filtro_empresa" value="gvu" checked><label for="empresa-gvu">GVU</label></div></td>
+                    <td><div class="radio-item"><input type="radio" id="empresa-cook" name="filtro_empresa" value="cook"><label for="empresa-cook">COOK</label></div></td>
+                    <td><div class="radio-item"><input type="radio" id="empresa-urba" name="filtro_empresa" value="urba"><label for="empresa-urba">URBA</label></div></td>
+                    <td><div class="radio-item"><input type="radio" id="empresa-outro" name="filtro_empresa" value="outro"><label for="empresa-outro">Outro</label></div></td>
+                    <td colspan="4"><input type="text" id="empresa-outro-texto" name="empresa_outro_texto" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Digite o nome da empresa" disabled></td>
+                </tr>
+                <tr>
+                    <td class="label-cell"><label><b>Equipamento:</b></label></td>
+                    <td><div class="radio-item"><input type="radio" id="tipo-maquina" name="tipo_equipamento" value="desktop" checked><label for="tipo-maquina">Desktop</label></div></td>
+                    <td><div class="radio-item"><input type="radio" id="tipo-notebook" name="tipo_equipamento" value="notebook"><label for="tipo-notebook">Notebook</label></div></td>
+                    <td><div class="radio-item"><input type="radio" id="tipo-monitor" name="tipo_equipamento" value="monitor"><label for="tipo-monitor">Monitor</label></div></td>
+                    <td><div class="radio-item"><input type="radio" id="tipo-outro" name="tipo_equipamento" value="outro"><label for="tipo-outro">Outro</label></div></td>
+                    <td colspan="4"><input type="text" id="equipamento-outro-texto" name="equipamento_outro_texto" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Digite o tipo de equipamento" disabled></td>
+                </tr>
+            </table>
+        </div>
+
+            <div class="form-fields-grid">
+                <div class="field-group">
+                    <label for="equipamento-nome">Nome do Equipamento:</label>
+                    <input type="text" id="equipamento-nome" name="nome_equipamento">
+                </div>
+                <div class="field-group">
+                    <label for="etiqueta-antiga">Etiqueta Antiga:</label>
+                    <input type="text" id="etiqueta-antiga" name="etiqueta_antiga">
+                </div>
+
+                <div class="field-group">
+                    <label for="quantidade">Quantidade:</label>
+                    <input type="number" id="quantidade" name="quantidade">
+                </div>
+                <div class="field-group">
+                    <label for="marca_modelo">Marca/Modelo:</label>
+                    <input type="text" id="marca_modelo" name="marca_modelo">
+                </div>
+
+                <div class="field-group">
+                    <label for="cpu">CPU:</label>
+                    <input type="text" id="cpu" name="cpu" placeholder="Apenas para Computadores">
+                </div>
+                <div class="field-group">
+                    <label for="ram">RAM:</label>
+                    <input type="number" id="ram" name="ram" placeholder="Apenas para Computadores">
+                </div>
+
+                <div class="field-group">
+                    <label for="armazenamento">Armazenamento:</label>
+                    <input type="text" id="armazenamento" name="armazenamento" placeholder="Apenas para Computadores">
+                </div>
+                <div class="field-group">
+                    <label for="entradas-video">Entradas de Vídeo:</label>
+                    <input type="text" id="entradas-video" name="entradas_video" placeholder="Ex: HDMI, VGA, DisplayPort">
+                </div>
+
+                <div class="field-group">
+                    <label for="entrada">Data de Entrada:</label>
+                    <input type="date" id="entrada" name="data_entrada">
+                </div>
+                
+                <div class="field-group full-width">
+                    <label for="observacao">Observação:</label>
+                    <textarea id="observacao" name="observacao" rows="4"></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar Equipamento</button>
+                <a href="index.php" class="btn">Cancelar</a>
+            </div>
+        </form>
+
+    </div>
+
+<script src="script.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const statusMessage = document.getElementById('status-message');
+
+    // Verifica se a mensagem de sucesso ou erro existe na sessão PHP
+    <?php
+    if (isset($_SESSION['message']) || isset($_SESSION['error'])) {
+        $message = isset($_SESSION['message']) ? $_SESSION['message'] : $_SESSION['error'];
+        $isSuccess = isset($_SESSION['message']);
+        
+        // Limpa as mensagens da sessão para que não apareçam novamente
+        unset($_SESSION['message']);
+        unset($_SESSION['error']);
+    ?>
+    // Exibe o pop-up com a mensagem recebida do PHP
+    statusMessage.textContent = "<?php echo addslashes($message); ?>";
+    statusMessage.style.display = 'block';
+    
+    // Adiciona a classe para iniciar a animação
+    setTimeout(() => {
+        statusMessage.classList.add('show');
+    }, 10); // Pequeno delay para a animação funcionar
+
+    // Faz o pop-up desaparecer após 3 segundos
+    setTimeout(() => {
+        statusMessage.classList.remove('show');
+        // Oculta o pop-up completamente após a animação de desaparecimento
+        setTimeout(() => {
+            statusMessage.style.display = 'none';
+        }, 500); // Deve ser igual ou maior que a duração da transição CSS
+    }, 3000);
+    <?php
+    }
+    ?>
+});
+</script>
+
+</body>
+</html>
