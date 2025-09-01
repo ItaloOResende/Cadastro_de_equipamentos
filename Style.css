@@ -207,3 +207,31 @@ input:disabled, textarea:disabled { background-color: #f2f2f2; cursor: not-allow
 .form-fields-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
 .full-width { grid-column: 1 / -1; 
 }
+
+/*
+ * Seus estilos existentes continuam aqui.
+ * Adicione os seguintes estilos para as mensagens de sucesso e erro.
+ */
+
+.popup-success {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px 30px;
+    border-radius: 5px;
+    border: 1px solid #c3e6cb;
+    text-align: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    font-family: sans-serif;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popup-success.show {
+    opacity: 1;
+}

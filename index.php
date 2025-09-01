@@ -89,7 +89,7 @@ $result = $stmt->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Estoque - Grupo Vitória da União</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Style.css">
 </head>
 <body>
     <div class="container">
@@ -130,7 +130,7 @@ $result = $stmt->get_result();
                             <div class="actions-cell">
                                 <input type="text" id="search-input" name="search-input" placeholder="Pesquisar..." value="<?php echo htmlspecialchars($search_query); ?>">
                                 <button class="btn" type="submit">Pesquisar</button>
-                                <button class="btn btn-primary" type="button" onclick="window.location.href='cadastrar.html'">Cadastrar Equipamento</button>
+                                <button class="btn btn-primary" type="button" onclick="window.location.href='cadastrar.php'">Cadastrar Equipamento</button>
                             </div>
                         </td>
                     </tr>
