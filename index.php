@@ -40,23 +40,33 @@ $filtro_tipo = $_GET['filtro_tipo'] ?? 'todos';
 $filtro_status = $_GET['filtro_status'] ?? 'todas';
 
 // Define a consulta SQL base para buscar os equipamentos
-$sql = "SELECT id, nome_equipamento, etiqueta_antiga, quantidade, situacao FROM equipamentos WHERE 1=1";
+$sql = "SELECT id, nome_equipamento, etiqueta_antiga, quantidade, situacao, empresa FROM equipamentos WHERE 1=1";
 $params = [];
 $types = "";
 
-// Lógica para aplicar os filtros da pesquisa
+// Lógica para aplicar os filtros da pesquisa de empresa
 if ($filtro_empresa !== 'ambos') {
-    $sql .= " AND empresa = ?";
-    $params[] = $filtro_empresa;
-    $types .= "s";
+    if ($filtro_empresa === 'outro') {
+        $sql .= " AND empresa NOT IN ('gvu', 'cook', 'urba')";
+    } else {
+        $sql .= " AND empresa = ?";
+        $params[] = $filtro_empresa;
+        $types .= "s";
+    }
 }
 
+// Lógica para aplicar os filtros da pesquisa de tipo de equipamento
 if ($filtro_tipo !== 'todos') {
-    $sql .= " AND tipo_equipamento = ?";
-    $params[] = $filtro_tipo;
-    $types .= "s";
+    if ($filtro_tipo === 'outros') {
+        $sql .= " AND tipo_equipamento NOT IN ('desktop', 'notebook', 'monitor')";
+    } else {
+        $sql .= " AND tipo_equipamento = ?";
+        $params[] = $filtro_tipo;
+        $types .= "s";
+    }
 }
 
+// Lógica para aplicar os filtros da pesquisa de situação
 if ($filtro_status !== 'todas') {
     $sql .= " AND situacao = ?";
     $params[] = $filtro_status;
@@ -64,10 +74,17 @@ if ($filtro_status !== 'todas') {
 }
 
 if (!empty($search_query)) {
-    $sql .= " AND (nome_equipamento LIKE ? OR etiqueta_antiga LIKE ?)";
+    // AQUI ESTÁ A MUDANÇA: O filtro de pesquisa agora inclui todos os campos relevantes.
+    $sql .= " AND (nome_equipamento LIKE ? OR etiqueta_antiga LIKE ? OR marca_modelo LIKE ? OR cpu LIKE ? OR ram LIKE ? OR armazenamento LIKE ? OR entradas_video LIKE ? OR observacao LIKE ?)";
     $params[] = "%" . $search_query . "%";
     $params[] = "%" . $search_query . "%";
-    $types .= "ss";
+    $params[] = "%" . $search_query . "%";
+    $params[] = "%" . $search_query . "%";
+    $params[] = "%" . $search_query . "%";
+    $params[] = "%" . $search_query . "%";
+    $params[] = "%" . $search_query . "%";
+    $params[] = "%" . $search_query . "%";
+    $types .= "ssssssss";
 }
 
 // Prepara e executa a consulta com Prepared Statements
@@ -111,18 +128,18 @@ $result = $stmt->get_result();
                     <tr>
                         <td class="label-cell"><label><b>Equipamento:</b></label></td>
                         <td><div class="radio-item"><input type="radio" id="tipo-todos" name="filtro_tipo" value="todos" <?php echo ($filtro_tipo == 'todos') ? 'checked' : ''; ?>><label for="tipo-todos">Todos</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="tipo-maquina" name="filtro_tipo" value="maquina" <?php echo ($filtro_tipo == 'maquina') ? 'checked' : ''; ?>><label for="tipo-maquina">Desktop</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="tipo-notebook" name="filtro_tipo" value="maquina" <?php echo ($filtro_tipo == 'maquina') ? 'checked' : ''; ?>><label for="tipo-notebook">Notebook</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="tipo-desktop" name="filtro_tipo" value="desktop" <?php echo ($filtro_tipo == 'desktop') ? 'checked' : ''; ?>><label for="tipo-desktop">Desktop</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="tipo-notebook" name="filtro_tipo" value="notebook" <?php echo ($filtro_tipo == 'notebook') ? 'checked' : ''; ?>><label for="tipo-notebook">Notebook</label></div></td>
                         <td><div class="radio-item"><input type="radio" id="tipo-monitor" name="filtro_tipo" value="monitor" <?php echo ($filtro_tipo == 'monitor') ? 'checked' : ''; ?>><label for="tipo-monitor">Monitor</label></div></td>
                         <td><div class="radio-item"><input type="radio" id="tipo-outros" name="filtro_tipo" value="outros" <?php echo ($filtro_tipo == 'outros') ? 'checked' : ''; ?>><label for="tipo-outros">Outros</label></div></td>
                     </tr>
                     <tr>
                         <td class="label-cell"><label><b>Situação:</b></label></td>
                         <td><div class="radio-item"><input type="radio" id="filtro-todas" name="filtro_status" value="todas" <?php echo ($filtro_status == 'todas') ? 'checked' : ''; ?>><label for="filtro-todas">Todas</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="filtro-estoque" name="filtro_status" value="estoque" <?php echo ($filtro_status == 'estoque') ? 'checked' : ''; ?>><label for="filtro-estoque">Estoque</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="filtro-emprestimo" name="filtro_status" value="emprestimo" <?php echo ($filtro_status == 'emprestimo') ? 'checked' : ''; ?>><label for="filtro-emprestimo">Empréstimo</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="filtro-lixo" name="filtro_status" value="lixo" <?php echo ($filtro_status == 'lixo') ? 'checked' : ''; ?>><label for="filtro-lixo">Lixo eletrônico</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="filtro-descartar" name="filtro_status" value="descartar" <?php echo ($filtro_status == 'descartar') ? 'checked' : ''; ?>><label for="filtro-descartar">Descarte</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="filtro-estoque" name="filtro_status" value="Estoque" <?php echo ($filtro_status == 'Estoque') ? 'checked' : ''; ?>><label for="filtro-estoque">Estoque</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="filtro-emprestimo" name="filtro_status" value="Empréstimo" <?php echo ($filtro_status == 'Empréstimo') ? 'checked' : ''; ?>><label for="filtro-emprestimo">Empréstimo</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="filtro-lixo" name="filtro_status" value="Lixo Eletrônico" <?php echo ($filtro_status == 'Lixo Eletrônico') ? 'checked' : ''; ?>><label for="filtro-lixo">Lixo eletrônico</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="filtro-descarte" name="filtro_status" value="Descarte" <?php echo ($filtro_status == 'Descarte') ? 'checked' : ''; ?>><label for="filtro-descarte">Descarte</label></div></td>
                     </tr>
                     <tr>
                         <td class="label-cell"><label for="search-input"><b>Localizar:</b></label></td>
@@ -144,6 +161,7 @@ $result = $stmt->get_result();
                     <tr>
                         <th>Equipamento</th>
                         <th>Antigo</th>
+                        <th>Empresa</th>
                         <th>Situação</th>
                         <th>Ações</th>
                     </tr>
@@ -156,6 +174,7 @@ $result = $stmt->get_result();
                             <tr>
                                 <td><?php echo htmlspecialchars($row["nome_equipamento"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["etiqueta_antiga"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["empresa"]); ?></td>
                                 <td><?php echo htmlspecialchars($row["situacao"]); ?></td>
                                 <td>
                                     <button class='status-button' data-action='verify' data-id='<?php echo htmlspecialchars($row['id']); ?>' title='Verificar informações'>🔍</button>
@@ -168,7 +187,7 @@ $result = $stmt->get_result();
                             <?php
                         }
                     } else {
-                        echo "<tr><td colspan='4'>Nenhum equipamento encontrado.</td></tr>";
+                        echo "<tr><td colspan='5'>Nenhum equipamento encontrado.</td></tr>";
                     }
                     ?>
                 </tbody>

@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-fields-grid">
                 <div class="field-group">
                     <label for="equipamento-nome">Nome do Equipamento:</label>
-                    <input type="text" id="equipamento-nome" name="equipamento_nome" value="<?php echo htmlspecialchars($equipamento['nome_equipamento']); ?>" placeholder="Ex: GVU001..." readonly style="background-color: #e9ecef;">
+                    <input type="text" id="equipamento-nome" name="equipamento_nome" value="<?php echo htmlspecialchars($equipamento['nome_equipamento']); ?>" ...>
                 </div>
                 <div class="field-group">
                     <label for="etiqueta-antiga">Etiqueta Antiga:</label>
