@@ -31,7 +31,7 @@ session_start();
                     <td><div class="radio-item"><input type="radio" id="empresa-cook" name="filtro_empresa" value="cook"><label for="empresa-cook">COOK</label></div></td>
                     <td><div class="radio-item"><input type="radio" id="empresa-urba" name="filtro_empresa" value="urba"><label for="empresa-urba">URBA</label></div></td>
                     <td><div class="radio-item"><input type="radio" id="empresa-outro" name="filtro_empresa" value="outro"><label for="empresa-outro">Outro</label></div></td>
-                    <td colspan="4"><input type="text" id="empresa-outro-texto" name="empresa_outro_texto" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Digite o nome da empresa" disabled></td>
+                    <td colspan="4"><input type="text" id="empresa-outro-texto" name="empresa_outro_texto" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Digite o nome da empresa" disabled required></td>
                 </tr>
                 <tr>
                     <td class="label-cell"><label><b>Equipamento:</b></label></td>
@@ -39,7 +39,7 @@ session_start();
                     <td><div class="radio-item"><input type="radio" id="tipo-notebook" name="tipo_equipamento" value="notebook"><label for="tipo-notebook">Notebook</label></div></td>
                     <td><div class="radio-item"><input type="radio" id="tipo-monitor" name="tipo_equipamento" value="monitor"><label for="tipo-monitor">Monitor</label></div></td>
                     <td><div class="radio-item"><input type="radio" id="tipo-outro" name="tipo_equipamento" value="outro"><label for="tipo-outro">Outro</label></div></td>
-                    <td colspan="4"><input type="text" id="equipamento-outro-texto" name="equipamento_outro_texto" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Digite o tipo de equipamento" disabled></td>
+                    <td colspan="4"><input type="text" id="equipamento-outro-texto" name="equipamento_outro_texto" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Digite o tipo de equipamento" disabled required></td>
                 </tr>
             </table>
         </div>

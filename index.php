@@ -40,7 +40,7 @@ $filtro_tipo = $_GET['filtro_tipo'] ?? 'todos';
 $filtro_status = $_GET['filtro_status'] ?? 'todas';
 
 // Define a consulta SQL base para buscar os equipamentos
-$sql = "SELECT id, nome_equipamento, etiqueta_antiga, quantidade, situacao, empresa FROM equipamentos WHERE 1=1";
+$sql = "SELECT id, nome_equipamento, etiqueta_antiga, situacao, empresa FROM equipamentos WHERE 1=1";
 $params = [];
 $types = "";
 
