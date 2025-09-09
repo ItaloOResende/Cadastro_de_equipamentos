@@ -150,11 +150,16 @@ $result = $stmt->get_result();
                                 <button class="btn btn-primary" type="button" onclick="window.location.href='cadastrar.php'">Cadastrar Equipamento</button>
                             </div>
                         </td>
+                        <td colspan="5">
+                                                                                                                    <div class="item-count">
+                Total de itens encontrados: <b><?php echo $result->num_rows; ?></b>
+            </div>
+                        </td>
+
                     </tr>
                 </table>
             </div>
         </form>
-
         <main>
             <table class="main-data-table">
                 <thead>
