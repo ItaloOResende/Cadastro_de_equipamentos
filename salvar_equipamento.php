@@ -52,9 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Verifica se outros campos importantes estão vazios
-    if (empty(trim($_POST['nome_equipamento'] ?? ''))) {
-        $errors[] = "O campo 'Nome do Equipamento' é obrigatório.";
-    }
     if (empty(trim($_POST['data_entrada'] ?? ''))) {
         $errors[] = "O campo 'Data de Entrada' é obrigatório.";
     }
@@ -127,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if ($success) {
-        $_SESSION['message'] = "Equipameto(s) salvo(s) com sucesso" . $quantidade . " equipamento(s)!";
+        $_SESSION['message'] = "Equipameto(s) salvo(s) com sucesso";
         header("Location: cadastrar.php");
         exit();
     } else {

@@ -75,7 +75,7 @@ if ($filtro_status !== 'todas') {
 
 if (!empty($search_query)) {
     // AQUI ESTÁ A MUDANÇA: O filtro de pesquisa agora inclui todos os campos relevantes.
-    $sql .= " AND (nome_equipamento LIKE ? OR etiqueta_antiga LIKE ? OR marca_modelo LIKE ? OR cpu LIKE ? OR ram LIKE ? OR armazenamento LIKE ? OR entradas_video LIKE ? OR observacao LIKE ?)";
+    $sql .= " AND (tipo_equipamento LIKE ? OR nome_equipamento LIKE ? OR etiqueta_antiga LIKE ? OR marca_modelo LIKE ? OR cpu LIKE ? OR ram LIKE ? OR armazenamento LIKE ? OR entradas_video LIKE ? OR observacao LIKE ?)";
     $params[] = "%" . $search_query . "%";
     $params[] = "%" . $search_query . "%";
     $params[] = "%" . $search_query . "%";
@@ -84,7 +84,8 @@ if (!empty($search_query)) {
     $params[] = "%" . $search_query . "%";
     $params[] = "%" . $search_query . "%";
     $params[] = "%" . $search_query . "%";
-    $types .= "ssssssss";
+    $params[] = "%" . $search_query . "%";
+    $types .= "sssssssss";
 }
 
 // Prepara e executa a consulta com Prepared Statements
@@ -143,19 +144,18 @@ $result = $stmt->get_result();
                     </tr>
                     <tr>
                         <td class="label-cell"><label for="search-input"><b>Localizar:</b></label></td>
-                        <td colspan="5">
+                        <td colspan="4">
                             <div class="actions-cell">
                                 <input type="text" id="search-input" name="search-input" placeholder="Pesquisar..." value="<?php echo htmlspecialchars($search_query); ?>">
                                 <button class="btn" type="submit">Pesquisar</button>
                                 <button class="btn btn-primary" type="button" onclick="window.location.href='cadastrar.php'">Cadastrar Equipamento</button>
                             </div>
                         </td>
-                        <td colspan="5">
-                                                                                                                    <div class="item-count">
-                Total de itens encontrados: <b><?php echo $result->num_rows; ?></b>
-            </div>
+                        <td colspan="1">
+                            <div class="item-count">
+                                Total de itens encontrados: <b><?php echo $result->num_rows; ?></b>
+                            </div>
                         </td>
-
                     </tr>
                 </table>
             </div>

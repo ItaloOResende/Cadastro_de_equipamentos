@@ -31,7 +31,6 @@ use gvu
     entradas_video VARCHAR(255),
     observacao TEXT,
     data_entrada DATE NOT NULL,
-    data_saida DATE,
     situacao VARCHAR(50) DEFAULT 'Em estoque'
 );
 
