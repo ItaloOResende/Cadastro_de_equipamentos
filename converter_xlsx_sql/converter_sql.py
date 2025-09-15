@@ -4,22 +4,22 @@ import os
 def sanitize_for_sql(valor):
     """
     Formata valores para uma string SQL segura.
+    Se o valor for nulo, retorna uma string vazia.
     """
     if pd.isna(valor):
-        return "NULL"
+        return "''" # Alterado para retornar string vazia
+    elif isinstance(valor, (int, float)):
+        return str(valor)
     elif isinstance(valor, str):
-        # Escapa aspas simples e envolve a string em aspas simples
         valor_sanitizado = valor.replace("'", "''")
         return f"'{valor_sanitizado}'"
     else:
-        # Converte outros tipos de dados para string
-        return str(valor)
+        return f"'{str(valor)}'"
 
 def excel_para_sql(caminho_excel, nome_tabela, caminho_saida_sql):
     """
     Lê uma planilha Excel e gera um arquivo SQL com comandos INSERT.
     """
-    # Mapeamento das colunas da planilha para as colunas da tabela SQL
     colunas_map = {
         'Computadores': {
             'Empresa': 'empresa',
@@ -38,35 +38,32 @@ def excel_para_sql(caminho_excel, nome_tabela, caminho_saida_sql):
         'Monitores': {
             'Empresa': 'empresa',
             'Equipamento': 'tipo_equipamento',
-            'Nome': 'nome_equipamento',
             'Antigo/Etiqueta': 'etiqueta_antiga',
             'Marca': 'marca_modelo',
             'Modelo': 'marca_modelo_modelo',
             'Entradas de vídeo': 'entradas_video',
             'Observação': 'observacao',
             'Entrada': 'data_entrada',
+            'Situação': 'situacao'
         },
         'Outros equipamentos': {
             'Equipamento': 'tipo_equipamento',
             'Antigo/Etiqueta': 'etiqueta_antiga',
             'Marca/Modelo': 'marca_modelo',
-            'Modelo': 'marca_modelo_modelo',
             'Observação': 'observacao',
             'Entrada': 'data_entrada',
+            'Situação': 'situacao'
         }
     }
-
-    # As colunas da tabela SQL que serão preenchidas
+    
     colunas_sql = [
         'empresa', 'tipo_equipamento', 'nome_equipamento', 'etiqueta_antiga',
         'marca_modelo', 'cpu', 'ram', 'armazenamento',
         'entradas_video', 'observacao', 'data_entrada', 'situacao'
     ]
-    colunas_sql_str = ', '.join(colunas_sql)
 
     todos_inserts = []
     
-    # Usa o pd.ExcelFile para ler todas as abas
     try:
         xls = pd.ExcelFile(caminho_excel)
     except FileNotFoundError:
@@ -77,51 +74,62 @@ def excel_para_sql(caminho_excel, nome_tabela, caminho_saida_sql):
         if sheet_name in colunas_map:
             df = pd.read_excel(xls, sheet_name=sheet_name)
             
-            # Ajusta as colunas do DataFrame para o mapeamento
+            # Renomeia as colunas
             df = df.rename(columns={k: v for k, v in colunas_map[sheet_name].items()})
             
-            # Garante que todas as colunas SQL existam, preenchendo com None se necessário
+            # Adiciona colunas que podem não existir na planilha, para garantir consistência
             for col in colunas_sql:
                 if col not in df.columns:
                     df[col] = None
-            
+
+            # Ajuste para garantir que a coluna 'empresa' exista
+            if 'empresa' not in df.columns or df['empresa'].isnull().all():
+                df['empresa'] = 'GVU'
+
             # Combina colunas de marca e modelo
             if 'marca_modelo_modelo' in df.columns:
                 df['marca_modelo'] = df['marca_modelo'].fillna('') + ' ' + df['marca_modelo_modelo'].fillna('')
-                df['marca_modelo'] = df['marca_modelo'].str.strip()
-            
+                df['marca_modelo'] = df['marca_modelo'].str.strip().replace('', None)
+                df.drop(columns=['marca_modelo_modelo'], inplace=True)
+
             # Combina observações
             df['observacao'] = df['observacao'].fillna('')
             if 'Usuário' in df.columns:
-                df['observacao'] = df.apply(lambda row: f"{row['observacao']} | Usuário: {row['Usuário']}" if pd.notna(row['Usuário']) else row['observacao'], axis=1)
-            if 'Setor' in df.columns:
-                df['observacao'] = df.apply(lambda row: f"{row['observacao']} | Setor: {row['Setor']}" if pd.notna(row['Setor']) else row['observacao'], axis=1)
+                df['observacao'] = df.apply(lambda row: f"{row['observacao']} | Usuário: {row['Usuário']}".strip(' | ') if pd.notna(row['Usuário']) else row['observacao'], axis=1)
+                df.drop(columns=['Usuário'], inplace=True)
             
-            # Adiciona valores padrões
-            df['empresa'] = df['empresa'].fillna('GVU')
+            if 'Setor' in df.columns:
+                df.drop(columns=['Setor'], inplace=True)
+
+            # Aplica valores padrão
             df['tipo_equipamento'] = df['tipo_equipamento'].fillna(sheet_name)
             df['situacao'] = df['situacao'].fillna('Em estoque')
-            df['data_entrada'] = pd.to_datetime(df['data_entrada'], errors='coerce').dt.strftime('%Y-%m-%d')
             
-            # Filtra apenas as colunas da tabela SQL
+            # Converte a coluna de data para o formato YYYY-MM-DD
+            df['data_entrada'] = pd.to_datetime(df['data_entrada'], errors='coerce').dt.strftime('%Y-%m-%d')
+            df.dropna(subset=['data_entrada'], inplace=True)
+            
+            # Garante a ordem correta das colunas
             df = df[colunas_sql]
 
             # Gera as instruções INSERT
-            sql_inserts = []
+            colunas_sql_str = ', '.join(colunas_sql)
             for _, row in df.iterrows():
                 valores = [sanitize_for_sql(row[col]) for col in colunas_sql]
                 valores_str = ', '.join(valores)
                 insert_statement = f"INSERT INTO {nome_tabela} ({colunas_sql_str}) VALUES ({valores_str});\n"
-                sql_inserts.append(insert_statement)
+                todos_inserts.append(insert_statement)
             
-            todos_inserts.extend(sql_inserts)
+            print(f"Processado a planilha '{sheet_name}'. Adicionadas {len(df)} linhas ao script SQL.")
 
     # Salva as instruções em um arquivo SQL
-    with open(caminho_saida_sql, 'w', encoding='utf-8') as f:
-        f.writelines(todos_inserts)
-    
-    print(f"Arquivo SQL gerado com sucesso em '{caminho_saida_sql}'!")
-    print(f"Total de linhas convertidas: {len(todos_inserts)}")
+    if todos_inserts:
+        with open(caminho_saida_sql, 'w', encoding='utf-8') as f:
+            f.writelines(todos_inserts)
+        print(f"\nArquivo SQL gerado com sucesso em '{caminho_saida_sql}'!")
+        print(f"Total de linhas convertidas: {len(todos_inserts)}")
+    else:
+        print("\nNenhum dado válido encontrado para gerar o arquivo SQL.")
 
 if __name__ == "__main__":
     caminho_do_excel = 'EQUIPAMENTOS GVU.xlsx'
