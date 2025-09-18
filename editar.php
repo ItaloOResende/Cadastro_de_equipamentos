@@ -103,9 +103,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <table class="filter-table">
                     <tr>
                         <td class="label-cell"><label><b>Empresa:</b></label></td>
-                        <td><div class="radio-item"><input type="radio" id="empresa-gvu" name="filtro_empresa" value="gvu" <?php echo ($equipamento['empresa'] == 'gvu') ? 'checked' : ''; ?>><label for="empresa-gvu">GVU</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="empresa-cook" name="filtro_empresa" value="cook" <?php echo ($equipamento['empresa'] == 'cook') ? 'checked' : ''; ?>><label for="empresa-cook">COOK</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="empresa-urba" name="filtro_empresa" value="urba" <?php echo ($equipamento['empresa'] == 'urba') ? 'checked' : ''; ?>><label for="empresa-urba">URBA</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="empresa-gvu" name="filtro_empresa" value="GVU" <?php echo ($equipamento['empresa'] == 'gvu') ? 'checked' : ''; ?>><label for="empresa-gvu">GVU</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="empresa-cook" name="filtro_empresa" value="COOK" <?php echo ($equipamento['empresa'] == 'cook') ? 'checked' : ''; ?>><label for="empresa-cook">COOK</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="empresa-urba" name="filtro_empresa" value="URBA" <?php echo ($equipamento['empresa'] == 'urba') ? 'checked' : ''; ?>><label for="empresa-urba">URBA</label></div></td>
                         <td><div class="radio-item"><input type="radio" id="empresa-outro" name="filtro_empresa" value="outro" <?php echo (!in_array($equipamento['empresa'], ['gvu', 'cook', 'urba'])) ? 'checked' : ''; ?>><label for="empresa-outro">Outro</label></div></td>
                     </tr>
                     <tr>
