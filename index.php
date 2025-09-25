@@ -17,12 +17,27 @@ if ($conn->connect_error) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'] ?? null;
     $situacao = $_POST['situacao'] ?? null;
+    $nome_emprestimo = $_POST['nome_emprestimo'] ?? null; // Novo: Captura o nome da pessoa
 
     if ($id !== null && $situacao !== null) {
-        $sql_update = "UPDATE equipamentos SET situacao = ? WHERE id = ?";
+        $sql_update = "UPDATE equipamentos SET situacao = ?";
+        $params = [$situacao];
+        $types = "s";
+
+        // Se a situação for "Empréstimo", adicione o nome da pessoa à atualização
+        if ($situacao === 'Empréstimo' && $nome_emprestimo !== null) {
+            $sql_update .= ", nome_emprestimo = ?"; // Adiciona o campo para o nome
+            $params[] = $nome_emprestimo;
+            $types .= "s";
+        }
+        
+        $sql_update .= " WHERE id = ?";
+        $params[] = $id;
+        $types .= "i";
+
         $stmt_update = $conn->prepare($sql_update);
         if ($stmt_update) {
-            $stmt_update->bind_param("si", $situacao, $id);
+            $stmt_update->bind_param($types, ...$params);
             $stmt_update->execute();
             $stmt_update->close();
             echo json_encode(['success' => true]);
@@ -68,9 +83,13 @@ if ($filtro_tipo !== 'todos') {
 
 // Lógica para aplicar os filtros da pesquisa de situação
 if ($filtro_status !== 'todas') {
-    $sql .= " AND situacao = ?";
-    $params[] = $filtro_status;
-    $types .= "s";
+    if ($filtro_status === 'Empréstimo') {
+        $sql .= " AND situacao NOT IN ('Estoque', 'Lixo eletrônico', 'Descarte')";
+    } else {
+        $sql .= " AND situacao = ?";
+        $params[] = $filtro_status;
+        $types .= "s";
+    }
 }
 
 if (!empty($search_query)) {
