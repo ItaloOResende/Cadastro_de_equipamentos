@@ -12,7 +12,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (action === 'verify') {
                     window.location.href = `editar.php?id=${equipmentId}`;
+                } else if (action === 'Empréstimo') {
+                    // Novo comportamento para o botão "Empréstimo"
+                    const nomePessoa = prompt("Para quem você está emprestando este equipamento?");
+                    
+                    // Se o usuário cancelar ou não digitar nada, a ação é abortada
+                    if (nomePessoa === null || nomePessoa.trim() === "") {
+                        alert("Empréstimo cancelado ou nome não fornecido.");
+                        return;
+                    }
+                    
+                    // Envia a requisição com o nome da pessoa
+                    fetch('index.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `id=${equipmentId}&situacao=${action}&situacao=${encodeURIComponent(nomePessoa.trim())}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Empréstimo realizado com sucesso para ${nomePessoa}!`);
+                            window.location.reload();
+                        } else {
+                            alert('Erro ao atualizar a situação: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        alert('Ocorreu um erro na requisição.');
+                    });
                 } else {
+                    // Comportamento padrão para os outros botões
                     if (confirm(`Tem certeza de que deseja alterar a situação para "${action}"?`)) {
                         fetch('index.php', {
                             method: 'POST',
@@ -40,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Lógica para o formulário de Cadastro e Edição ---
+    // --- Lógica para o formulário de Cadastro e Edição (não alterada) ---
     const formEquipamento = document.querySelector('.cadastro-form');
     if (formEquipamento) {
         const nomeEquipamentoInput = document.getElementById('equipamento-nome');
