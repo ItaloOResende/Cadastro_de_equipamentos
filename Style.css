@@ -250,3 +250,67 @@ input:disabled, textarea:disabled { background-color: #f2f2f2; cursor: not-allow
     color: #007bff;
     font-weight: bold;
 }
+
+/* --- Estilos do Modal de Empréstimo --- */
+
+/* Contêiner principal do modal (overlay) */
+#loan-modal {
+    display: none; /* Inicialmente oculto, o JS irá mostrar */
+    position: fixed;
+    z-index: 1000; /* Garante que fique acima de todos os outros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Fundo escuro transparente */
+    /* Garante que o conteúdo dentro do modal esteja centralizado */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Conteúdo do modal */
+.loan-modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px; /* Tamanho máximo */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    /* Para navegadores mais antigos que não suportam 'display: flex' no pai */
+    margin: auto; 
+}
+
+/* Estilo para os inputs de texto e data */
+.loan-modal-content input[type="text"],
+.loan-modal-content input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 15px 0;
+    box-sizing: border-box; /* Inclui padding e borda na largura total */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Estilos para os botões */
+.loan-modal-content button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px; /* Espaçamento entre botões */
+}
+
+/* Botão de Confirmação (Azul) */
+.loan-modal-content .btn-confirm {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Botão de Cancelar (Cinza) */
+.loan-modal-content .btn-cancel {
+    background-color: #ccc;
+    color: black;
+}
