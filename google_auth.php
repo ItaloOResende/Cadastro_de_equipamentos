@@ -18,9 +18,11 @@ if (!defined('TOKEN_PATH')) {
 function getCurrentUri() {
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
     $host = $_SERVER['HTTP_HOST'];
-    $uri = $_SERVER['REQUEST_URI'];
-    // Retorna a URL completa: http://localhost/caminho/do/script.php?parametros
-    return $protocol . "://" . $host . $uri;
+    
+    // CORREÇÃO ESSENCIAL: Pega apenas o caminho do script (o caminho do arquivo), ignorando o "?code=..." e outros parâmetros.
+    $uri_path = strtok($_SERVER['REQUEST_URI'], '?');
+
+    return $protocol . "://" . $host . $uri_path;
 }
 
 function getGoogleClient() {
