@@ -34,7 +34,11 @@ function getGoogleClient() {
     $client->setAuthConfig($credentials_path); 
     $client->setAccessType('offline');
     $client->setPrompt('select_account consent');
-    $client->setScopes(SCOPES);
+    $client->setScopes([
+        Google\Service\Docs::DOCUMENTS,
+        Google\Service\Drive::DRIVE_READONLY, // Adicione este escopo
+        // Ou use Google\Service\Drive::DRIVE para permissão total, mas READONLY basta para copiar
+    ]);
     
     // CORREÇÃO ESSENCIAL: Define o Redirect URI para o URL atual do script
     $client->setRedirectUri(getCurrentUri()); 
