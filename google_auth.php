@@ -36,7 +36,7 @@ function getGoogleClient() {
     $client->setPrompt('select_account consent');
     $client->setScopes([
         Google\Service\Docs::DOCUMENTS,
-        Google\Service\Drive::DRIVE_READONLY, // Adicione este escopo
+        Google\Service\Drive::DRIVE, // Adicione este escopo
         // Ou use Google\Service\Drive::DRIVE para permissão total, mas READONLY basta para copiar
     ]);
     
