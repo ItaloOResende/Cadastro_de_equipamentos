@@ -131,9 +131,6 @@ $result = $stmt->get_result();
     <link rel="stylesheet" href="Style.css">
 </head>
 <body>
-    <a href="gerarDocumento.php?teste=true" class="btn btn-warning" style="margin-left: 10px;">
-    TESTE API DOCS
-</a>
     <div class="container">
         <header class="main-header">
             <h1>Grupo Vitória da União (GVU)</h1>
