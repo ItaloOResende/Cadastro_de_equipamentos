@@ -2,18 +2,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ------------------------------------------------------------------
     // NOVO BLOCO: Lógica para exibir alerta de sucesso após o redirecionamento do PHP
-    // Esta parte verifica os parâmetros da URL para exibir a mensagem.
+    // Esta parte foi ATUALIZADA para usar um CONFIRM para contornar o bloqueio de pop-ups.
     // ------------------------------------------------------------------
     const params = new URLSearchParams(window.location.search);
     const status = params.get('status');
     const nomePessoaParam = params.get('nome_pessoa');
+    const docLink = params.get('doc_link'); // Captura o link que vem do PHP
 
     if (status === 'success_emprestimo' && nomePessoaParam) {
-        // Exibe o alerta com a mensagem de sucesso que você solicitou
-        alert(`Empréstimo realizado com sucesso para ${nomePessoaParam}!`);
+
+        // 1. Apresenta o alerta de sucesso e pergunta se deseja abrir o documento.
+        // O clique no botão "OK" do confirm é considerado uma ação do usuário, 
+        // o que geralmente permite a abertura da nova aba!
+        const confirmOpen = confirm(
+            `Empréstimo realizado com sucesso para ${nomePessoaParam}!\n\n` +
+            `Deseja abrir o Termo de Compromisso agora?`
+        );
         
-        // Limpa os parâmetros da URL para evitar que o alerta apareça em um recarregamento acidental
-        // A URL volta a ser index.php sem os parâmetros de status.
+        if (confirmOpen && docLink) {
+            window.open(docLink, '_blank'); 
+        } else if (!docLink) {
+             // Caso o link não chegue por algum motivo, avisa o usuário
+             alert("O link do documento não foi encontrado. Verifique o Google Drive.");
+        }
+
+        // 2. Limpa os parâmetros da URL
         history.replaceState(null, '', window.location.pathname);
     }
     // ------------------------------------------------------------------
