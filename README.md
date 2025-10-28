@@ -77,7 +77,7 @@ Para rodar a aplicação, você precisará ter instalado:
 
 ## 👤 Autor
 
-| [<img src="https://avatars.githubusercontent.com/u/SEU_ID_DO_GITHUB?v=4" width=115><br><sub>Seu Nome Completo</sub>](https://github.com/ItaloOResende) |
+| [<img src="https://avatars.githubusercontent.com/u/SEU_ID_DO_GITHUB?v=4" width=115><br><sub>Italo Oliveira Resende</sub>](https://github.com/ItaloOResende) |
 | :---: |
 
 * **GitHub:** [ItaloOResende](https://github.com/ItaloOResende)
