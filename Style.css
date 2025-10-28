@@ -128,6 +128,12 @@ body { font-family: sans-serif; color: #333; }
 .main-data-table thead { background-color: #f2f2f2; }
 .main-data-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
 .main-data-table tbody tr:hover { background-color: #f1f1f1; }
+/* Adiciona uma regra de estilo para a coluna de ações */
+.main-data-table td:last-child {
+    width: 200px;
+}
+
+
 .btn, .btn-primary {
     display: inline-block; padding: 8px 12px; border: 1px solid #ccc; background-color: #f7f7f7;
     text-decoration: none; color: #333; border-radius: 4px; cursor: pointer; margin-right: 5px;
@@ -202,5 +208,109 @@ input:disabled, textarea:disabled { background-color: #f2f2f2; cursor: not-allow
 .full-width { grid-column: 1 / -1; 
 }
 
+/*
+ * Seus estilos existentes continuam aqui.
+ * Adicione os seguintes estilos para as mensagens de sucesso e erro.
+ */
 
+.popup-success {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px 30px;
+    border-radius: 5px;
+    border: 1px solid #c3e6cb;
+    text-align: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    font-family: sans-serif;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
+.popup-success.show {
+    opacity: 1;
+}
+
+/* Estilo para a contagem de itens */
+.item-count {
+    text-align: right;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #555;
+    padding-right: 5px;
+}
+
+.item-count b {
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* --- Estilos do Modal de Empréstimo --- */
+
+/* Contêiner principal do modal (overlay) */
+#loan-modal {
+    display: none; /* Inicialmente oculto, o JS irá mostrar */
+    position: fixed;
+    z-index: 1000; /* Garante que fique acima de todos os outros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Fundo escuro transparente */
+    /* Garante que o conteúdo dentro do modal esteja centralizado */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Conteúdo do modal */
+.loan-modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px; /* Tamanho máximo */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    /* Para navegadores mais antigos que não suportam 'display: flex' no pai */
+    margin: auto; 
+}
+
+/* Estilo para os inputs de texto e data */
+.loan-modal-content input[type="text"],
+.loan-modal-content input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 15px 0;
+    box-sizing: border-box; /* Inclui padding e borda na largura total */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Estilos para os botões */
+.loan-modal-content button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px; /* Espaçamento entre botões */
+}
+
+/* Botão de Confirmação (Azul) */
+.loan-modal-content .btn-confirm {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Botão de Cancelar (Cinza) */
+.loan-modal-content .btn-cancel {
+    background-color: #ccc;
+    color: black;
+}

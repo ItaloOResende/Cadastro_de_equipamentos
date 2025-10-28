@@ -23,7 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tipo_equipamento = $_POST['filtro_tipo'] ?? null;
     $nome_equipamento = $_POST['equipamento_nome'] ?? null;
     $etiqueta_antiga = $_POST['etiqueta_antiga'] ?? null;
-    $quantidade = $_POST['quantidade'] ?? 1;
     $marca_modelo = $_POST['marca_modelo'] ?? null;
     $cpu = $_POST['cpu'] ?? null;
     $ram = $_POST['ram'] ?? null;
@@ -33,8 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $observacao = $_POST['observacao'] ?? null;
     
     $sql = "UPDATE equipamentos SET
-        empresa = ?, tipo_equipamento = ?, nome_equipamento = ?, etiqueta_antiga = ?,
-        quantidade = ?, marca_modelo = ?, cpu = ?, ram = ?, armazenamento = ?,
+        empresa = ?, tipo_equipamento = ?, nome_equipamento = ?, etiqueta_antiga = ?, 
+        marca_modelo = ?, cpu = ?, ram = ?, armazenamento = ?,
         entradas_video = ?, data_entrada = ?, observacao = ?
         WHERE id = ?";
 
@@ -43,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Erro na preparação da consulta: " . $conn->error);
     }
     
-    $stmt->bind_param("ssssisssssssi",
-        $empresa, $tipo_equipamento, $nome_equipamento, $etiqueta_antiga, $quantidade,
+    $stmt->bind_param("sssssssssssi",
+        $empresa, $tipo_equipamento, $nome_equipamento, $etiqueta_antiga,
         $marca_modelo, $cpu, $ram, $armazenamento, $entradas_video, $data_entrada,
         $observacao, $equipamento_id
     );
@@ -104,9 +103,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <table class="filter-table">
                     <tr>
                         <td class="label-cell"><label><b>Empresa:</b></label></td>
-                        <td><div class="radio-item"><input type="radio" id="empresa-gvu" name="filtro_empresa" value="gvu" <?php echo ($equipamento['empresa'] == 'gvu') ? 'checked' : ''; ?>><label for="empresa-gvu">GVU</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="empresa-cook" name="filtro_empresa" value="cook" <?php echo ($equipamento['empresa'] == 'cook') ? 'checked' : ''; ?>><label for="empresa-cook">COOK</label></div></td>
-                        <td><div class="radio-item"><input type="radio" id="empresa-urba" name="filtro_empresa" value="urba" <?php echo ($equipamento['empresa'] == 'urba') ? 'checked' : ''; ?>><label for="empresa-urba">URBA</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="empresa-gvu" name="filtro_empresa" value="GVU" <?php echo ($equipamento['empresa'] == 'gvu') ? 'checked' : ''; ?>><label for="empresa-gvu">GVU</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="empresa-cook" name="filtro_empresa" value="COOK" <?php echo ($equipamento['empresa'] == 'cook') ? 'checked' : ''; ?>><label for="empresa-cook">COOK</label></div></td>
+                        <td><div class="radio-item"><input type="radio" id="empresa-urba" name="filtro_empresa" value="URBA" <?php echo ($equipamento['empresa'] == 'urba') ? 'checked' : ''; ?>><label for="empresa-urba">URBA</label></div></td>
                         <td><div class="radio-item"><input type="radio" id="empresa-outro" name="filtro_empresa" value="outro" <?php echo (!in_array($equipamento['empresa'], ['gvu', 'cook', 'urba'])) ? 'checked' : ''; ?>><label for="empresa-outro">Outro</label></div></td>
                     </tr>
                     <tr>
@@ -122,15 +121,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-fields-grid">
                 <div class="field-group">
                     <label for="equipamento-nome">Nome do Equipamento:</label>
-                    <input type="text" id="equipamento-nome" name="equipamento_nome" value="<?php echo htmlspecialchars($equipamento['nome_equipamento']); ?>" placeholder="Ex: GVU001..." readonly style="background-color: #e9ecef;">
+                    <input type="text" id="equipamento-nome" name="equipamento_nome" value="<?php echo htmlspecialchars($equipamento['nome_equipamento']); ?>" ...>
                 </div>
                 <div class="field-group">
                     <label for="etiqueta-antiga">Etiqueta Antiga:</label>
                     <input type="text" id="etiqueta-antiga" name="etiqueta_antiga" value="<?php echo htmlspecialchars($equipamento['etiqueta_antiga']); ?>">
-                </div>
-                <div class="field-group">
-                    <label for="quantidade">Quantidade:</label>
-                    <input type="number" id="quantidade" name="quantidade" min="1" value="<?php echo htmlspecialchars($equipamento['quantidade']); ?>">
                 </div>
                 <div class="field-group">
                     <label for="marca-modelo">Marca/Modelo:</label>
@@ -168,8 +163,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
     </div>
-
-<script src="script.js"></script>
     
 </body>
 </html>
