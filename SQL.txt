@@ -24,7 +24,6 @@ use gvu
     tipo_equipamento VARCHAR(50) NOT NULL,
     nome_equipamento VARCHAR(255) NOT NULL,
     etiqueta_antiga VARCHAR(100),
-    quantidade INT DEFAULT 1,
     marca_modelo VARCHAR(255),
     cpu VARCHAR(100),
     ram VARCHAR(100),
@@ -32,7 +31,6 @@ use gvu
     entradas_video VARCHAR(255),
     observacao TEXT,
     data_entrada DATE NOT NULL,
-    data_saida DATE,
     situacao VARCHAR(50) DEFAULT 'Em estoque'
 );
 
