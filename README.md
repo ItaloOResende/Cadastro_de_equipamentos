@@ -81,7 +81,7 @@ Para rodar a aplicação, você precisará ter instalado:
 | :---: |
 
 * **GitHub:** [ItaloOResende](https://github.com/ItaloOResende)
-* **LinkedIn:** [[Link para seu LinkedIn]](https://www.linkedin.com/in/italooresende/)
+* **LinkedIn:** [[italooresende]](https://www.linkedin.com/in/italooresende/)
 * **E-mail:** italoliveira5@gmail.com
 
 ## 📄 Licença
