@@ -1,5 +1,5 @@
 <?php
-// Arquivo: gerarDocumento.php - Versão ATUALIZADA com UPDATE no BD
+// Arquivo: gerarDocumento.php - Versão ATUALIZADA com UPDATE no BD e SALVAMENTO EM PASTA ESPECÍFICA
 
 // 1. CONFIGURAÇÃO E AUTORIZAÇÃO GOOGLE
 require_once 'vendor/autoload.php';
@@ -8,6 +8,8 @@ require_once 'google_auth.php';
 // ID do SEU documento template
 // -----------------------------------------------------------
 $TEMPLATE_DOCUMENT_ID = '1QxsvfoAZmz_gntZ1kLWMwAZWzoN96uio2EJ2yb49VeU'; 
+// ID da pasta de destino fornecida pelo usuário: 1TBvZq9fyK1z7NNbRP45askR_QX1IC2Nj
+$TARGET_FOLDER_ID = '1TBvZq9fyK1z7NNbRP45askR_QX1IC2Nj';
 // -----------------------------------------------------------
 
 
@@ -102,12 +104,17 @@ if (!$equipamento) {
 // 5. COPIAR TEMPLATE E SUBSTUIÇÃO DE DADOS (GOOLGE DOCS API)
 // -----------------------------------------------------
 
-$newDocTitle = "Termo de Compromisso - " . $equipamento['nome_equipamento'] . " - " . date('Y-m-d');
+$newDocTitle = "Termo de Compromisso - " . $nomePessoa . " - " . date('d-m-y');
 
 // --- Passo 5.1: Copiar o template usando a API do Drive ---
+// ALTERAÇÃO AQUI: Passamos a nova pasta ($TARGET_FOLDER_ID) na propriedade 'parents'
 $copiedFile = $driveService->files->copy(
     $TEMPLATE_DOCUMENT_ID, 
-    new Google\Service\Drive\DriveFile(['name' => $newDocTitle])
+    new Google\Service\Drive\DriveFile([
+        'name' => $newDocTitle,
+        // Define a pasta de destino para a criação do arquivo
+        'parents' => [$TARGET_FOLDER_ID] 
+    ])
 );
 $newDocId = $copiedFile->getId();
 
@@ -139,7 +146,7 @@ $requests = [
     // 2. NOME DO RESPONSÁVEL (Usamos o nome capturado da URL)
     new Google\Service\Docs\Request([
         'replaceAllText' => [
-            // Presumindo que o seu marcador no template para o nome da pessoa seja {{nome_responsavel}} ou {{situacao}}
+            // Presumindo que o seu marcador no template para o nome da pessoa seja {{situacao}}
             'containsText' => ['text' => '{{situacao}}', 'matchCase' => true], 
             'replaceText' => $equipamento['nome_responsavel'], // Usa o nome da pessoa, não o status do BD
         ]
