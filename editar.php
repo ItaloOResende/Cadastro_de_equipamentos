@@ -85,14 +85,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Equipamento - GVU</title>
+    <title>Editar Equipamento</title>
     <link rel="stylesheet" href="Style.css">
 </head>
 <body>
 
     <div class="container">
         <header class="main-header">
-            <h1><a href="index.php" class="header-link">Grupo Vitória da União (GVU)</a></h1>
+            <h1><a href="index.php" class="header-link">Equipamentos cadastrados</a></h1>
             <h1>Editar Informações do Equipamento</h1>
         </header>
         

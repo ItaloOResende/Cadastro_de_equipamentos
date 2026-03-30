@@ -127,13 +127,13 @@ $result = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Estoque - Grupo Vitória da União</title>
+    <title>Cadastro de equipamentos</title>
     <link rel="stylesheet" href="Style.css">
 </head>
 <body>
     <div class="container">
         <header class="main-header">
-            <h1>Grupo Vitória da União (GVU)</h1>
+            <h1>Equipamentos cadastrados</h1>
         </header>
 
         <form method="GET" action="index.php">

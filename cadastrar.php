@@ -6,14 +6,14 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Equipamentos - GVU</title>
+    <title>Editar equipamento</title>
     <link rel="stylesheet" href="Style.css">
 </head>
 <body>
 
     <div class="container">
         <header class="main-header">
-            <h1><a href="index.php" class="header-link">Grupo Vitória da União (GVU)</a></h1>
+            <h1><a href="index.php" class="header-link">Equipamentos cadastrados</a></h1>
             <h1>Cadastrar Novo Equipamento</h1>
         </header>
         
